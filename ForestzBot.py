@@ -72,4 +72,4 @@ async def presence(ctx,text:str,type:int):
     else:
           await bot.say('No permission!')
 
-bot.run('NTQ2NjI3MzgyMTUzNTc2NDU1.XKCVOw.sDMfd5_vaYfolxSqF3L7hFaosCw')
+client.run(os.getenv.('NTQ2NjI3MzgyMTUzNTc2NDU1.XKCVOw.sDMfd5_vaYfolxSqF3L7hFaosCw'))
