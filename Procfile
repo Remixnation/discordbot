@@ -1,1 +1,1 @@
-worker: python ForestzBot.py
+worker: python Darkbot.py
