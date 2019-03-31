@@ -1,1 +1,1 @@
-worker: python Darkbot.py
+worker: python bot.py
