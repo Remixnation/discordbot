@@ -1,57 +1,75 @@
 import discord
 from discord.ext import commands
-from discord.ext.commands import Bot
 import asyncio
-import random
-import requests
-import os
+import time
 
-client = commands.Bot(command_prefix=":")
-player_dict = dict()
+bot=commands.Bot(command_prefix='!')
+dabs='440281410197258280'
+start=time.time()
 
-
-@client.event
+@bot.event
 async def on_ready():
-    print("Bot ist bereit")
+    print('Logged in as:')
+    print(bot.user.name)
+    print(bot.user.id)
+    print('--------------------')
+    await bot.change_presence(game=discord.Game(name='!help for command!',type=0))
+    
+@bot.command(pass_context=True)
+async def ping():
+    await bot.say(':ping_pong:')
+    await bot.say('You pinged me haha')
+    
+@bot.command(pass_context=True)
+async def mute(ctx,target:discord.Member):
+    if ctx.message.author.id==(dabs):
+      role=discord.utils.get(ctx.message.server.roles,name='Muted')
 
+      await bot.add_roles(target,role)
+    else:
+        await bot.say('No permission!')
 
-@client.command(pass_context=True)
-async def play (ctx, url):
-    channel = ctx.message.author.voice_channel
-    await client.join_voice_channel(channel)
-    server = ctx.message.server
-    voice = client.voice_client_in(server)
-    player = await voice.create_ytdl_player(url)
-    player_dict[server.id] = player
-    await client.send_message(ctx.message.channel, "Playing `%s` now" % player.title)
-    player.start()
+@bot.command(pass_context=True)
+async def warn(ctx,target:discord.Member):
+    if ctx.message.author.id==(dabs):
+      await bot.send_message(target,'Warning!!')
+    else:
+        await bot.say('No permission!')
+        
+@bot.command(pass_context=True)
+async def kick(ctx,target:discord.Member):
+    if ctx.message.author.id==(dabs):
+      await bot.kick(target)
+    else:
+        await bot.say('No permission!')
 
+@bot.command(pass_context=True)
+async def ban(ctx,target:discord.Member):
+    if ctx.message.author.id==(dabs):
+      await bot.ban(target)
+    else:
+        await bot.say('No permission!')
+    
+@bot.command(pass_context=True)
+async def uptime(ctx):
+    now=time.time()
+    sec=int(now-start)
+    mins=int(sec//60)
+    await bot.say(f'Uptime is {sec} seconds!')
+    
+@bot.command(pass_context=True)
+async def clear(ctx,num:int):
+    if ctx.message.author.id==(dabs):
+        await bot.purge_from(ctx.message.channel,limit=num)
+        await bot.say(f'Cleared {num} messages.')
+    else:
+          await bot.say('No permission!')
+          
+@bot.command(pass_context=True)
+async def presence(ctx,text:str,type:int):
+    if ctx.message.author.id==(dabs):
+        await bot.change_presence(game=discord.Game(name=text,type=type))
+    else:
+          await bot.say('No permission!')
 
-@client.command(pass_context=True)
-async def stop(ctx):
-    server = ctx.message.server
-    player = player_dict[server.id]
-    player.stop()
-    await client.send_message(ctx.message.channel, "Stopped `%s`" % player.title)
-    del player_dict[server.id]
-
-
-@client.command(pass_context=True)
-async def pause(ctx):
-    server = ctx.message.server
-    player = player_dict[server.id]
-    player.pause()
-    await client.send_message(ctx.message.channel, "Paused `%s`" % player.title)
-
-
-@client.command(pass_context=True)
-async def resume(ctx):
-    server = ctx.message.server
-    player = player_dict[server.id]
-    player.resume()
-    await client.send_message(ctx.message.channel, "Resumed `%s`" % player.title)
-
-
-
-#
-client.run(str(os.environ.get('NTQ2NjI3MzgyMTUzNTc2NDU1.XKE9Vg._uPJSR_fxZWLZtiQDoT6hw0f7yI')))
+bot.run('your token here')
