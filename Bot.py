@@ -72,4 +72,4 @@ async def presence(ctx,text:str,type:int):
     else:
           await bot.say('No permission!')
 
-bot.run('your token here')
+bot.run('NTQ2NjI3MzgyMTUzNTc2NDU1.XLH4Jw.cgZaO9oZdA4ZpcxSp_SV1y1y5uw)
